@@ -33,7 +33,7 @@ import java.util.Collections;
 @SuppressWarnings("unchecked")
 public class Functions {
     @api
-    public static class send_tab_msg extends CHPlusFunction {
+    public static class set_tab_msg extends CHPlusFunction {
         @Override
         public Construct exec(Target t, Environment environment, Construct... args) throws ConfigRuntimeException {
             new PlayerWrapper(args[0], t).sendPacket(
