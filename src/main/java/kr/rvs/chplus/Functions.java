@@ -32,15 +32,6 @@ import java.util.Collections;
  */
 @SuppressWarnings("unchecked")
 public class Functions {
-    private static Construct getOrDefault(Construct[] args, Integer index, Construct def) {
-        Construct ret = null;
-
-        if (args.length > index)
-            ret = args[index];
-
-        return ret != null ? ret : def;
-    }
-
     @api
     public static class send_tab_msg extends CHPlusFunction {
         @Override
