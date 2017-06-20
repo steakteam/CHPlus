@@ -3,11 +3,14 @@ package kr.rvs.chplus;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.laytonsmith.PureUtilities.Version;
+import com.laytonsmith.abstraction.MCFireworkEffect;
 import com.laytonsmith.abstraction.MCLocation;
 import com.laytonsmith.annotations.api;
+import com.laytonsmith.commandhelper.CommandHelperPlugin;
 import com.laytonsmith.core.CHVersion;
 import com.laytonsmith.core.ObjectGenerator;
 import com.laytonsmith.core.Static;
+import com.laytonsmith.core.constructs.CArray;
 import com.laytonsmith.core.constructs.CVoid;
 import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
@@ -19,18 +22,31 @@ import com.laytonsmith.core.exceptions.ConfigRuntimeException;
 import com.laytonsmith.core.functions.AbstractFunction;
 import kr.rvs.chplus.util.Packets;
 import kr.rvs.chplus.util.PlayerWrapper;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Firework;
+
+import java.util.Collections;
 
 /**
  * Created by Junhyeong Lim on 2017-06-18.
  */
 @SuppressWarnings("unchecked")
 public class Functions {
+    private static Construct getOrDefault(Construct[] args, Integer index, Construct def) {
+        Construct ret = null;
+
+        if (args.length > index)
+            ret = args[index];
+
+        return ret != null ? ret : def;
+    }
+
     @api
     public static class send_tab_msg extends CHPlusFunction {
         @Override
         public Construct exec(Target t, Environment environment, Construct... args) throws ConfigRuntimeException {
             new PlayerWrapper(args[0], t).sendPacket(
-                    Packets.createPlayerListHeaderFooterPacket(args[1].getValue(), args[2].getValue())
+                    Packets.createPlayerListHeaderFooterPacket(args[1].val(), args[2].val())
             );
             return CVoid.VOID;
         }
@@ -52,7 +68,7 @@ public class Functions {
         public Construct exec(Target t, Environment environment, Construct... args) throws ConfigRuntimeException {
             new PlayerWrapper(args[0], t).sendPacket(
                     Packets.createChatPacket(
-                            WrappedChatComponent.fromText(args[1].getValue()),
+                            WrappedChatComponent.fromText(args[1].val()),
                             CHPlus.CHAT_TYPE_GAME_INFO
                     )
             );
@@ -144,7 +160,22 @@ public class Functions {
         @Override
         public Construct exec(Target t, Environment environment, Construct... args) throws ConfigRuntimeException {
             MCLocation location = ObjectGenerator.GetGenerator().location(args[0], null, t);
-            // TODO
+            CArray array;
+
+            if (args.length >= 2) {
+                array = Static.getArray(args[1], t);
+            } else {
+                array = CArray.GetAssociativeArray(t);
+            }
+
+            MCFireworkEffect effect = ObjectGenerator.GetGenerator()
+                    .fireworkEffect(array, t);
+            Firework firework = (Firework) location.getWorld().launchFirework(
+                    location, 0, Collections.singletonList(effect)).getHandle();
+
+            Bukkit.getScheduler().runTaskLater(CommandHelperPlugin.self,
+                    firework::detonate, 2);
+
             return CVoid.VOID;
         }
 
@@ -160,7 +191,7 @@ public class Functions {
 
         @Override
         public Integer[] numArgs() {
-            return new Integer[] {1, 2, 3, 4, 5};
+            return new Integer[]{1, 2};
         }
 
         @Override

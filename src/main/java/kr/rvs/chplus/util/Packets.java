@@ -25,6 +25,7 @@ public class Packets {
         return packet;
     }
 
+    @SuppressWarnings("unchecked")
     public static PacketContainer createChatPacket(WrappedChatComponent component, byte type) {
         PacketContainer packet = ProtocolLibrary.getProtocolManager()
                 .createPacket(PacketType.Play.Server.CHAT);

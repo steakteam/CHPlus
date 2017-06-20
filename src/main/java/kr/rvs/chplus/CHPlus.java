@@ -26,7 +26,7 @@ public class CHPlus extends AbstractExtension {
         if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
             System.out.println("CHPlus " + getVersion() + " enabled.");
         } else {
-            System.out.println("ProtocolLib not found.");
+            System.out.println("[CHPlus] ProtocolLib not found.");
             throw new IllegalStateException("ProtocolLib not found.");
         }
     }
