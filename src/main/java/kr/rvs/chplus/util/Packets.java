@@ -31,7 +31,7 @@ public class Packets {
                 .createPacket(PacketType.Play.Server.CHAT);
 
         // Chat type
-        if (CHPlus.BUKKIT_VERSION.gt(CHPlus.V1_11_2)) {
+        if (CHPlus.BUKKIT_VERSION.gte(CHPlus.V1_12)) {
             Class chatTypeClass = EnumWrappers.getChatTypeClass();
             StructureModifier components = packet.getSpecificModifier(chatTypeClass);
 

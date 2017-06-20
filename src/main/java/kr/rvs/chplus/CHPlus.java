@@ -12,7 +12,7 @@ import org.bukkit.Bukkit;
 @MSExtension("CHPlus")
 public class CHPlus extends AbstractExtension {
     public static final Version BUKKIT_VERSION = new SimpleVersion(Bukkit.getVersion());
-    public static final Version V1_11_2 = new SimpleVersion(1, 11, 2);
+    public static final Version V1_12 = new SimpleVersion(1, 12, 0);
     public static final byte CHAT_TYPE_SYSTEM = 2;
     public static final byte CHAT_TYPE_GAME_INFO = 2;
 
