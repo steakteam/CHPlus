@@ -13,12 +13,14 @@ import org.bukkit.Bukkit;
 public class CHPlus extends AbstractExtension {
     public static final Version BUKKIT_VERSION = new SimpleVersion(Bukkit.getBukkitVersion());
     public static final Version V1_12 = new SimpleVersion(1, 12, 0);
+
+    // TODO: ProtocolLib 4.3.1 안정화 시 제거
     public static final byte CHAT_TYPE_SYSTEM = 1;
     public static final byte CHAT_TYPE_GAME_INFO = 2;
 
     @Override
     public Version getVersion() {
-        return new SimpleVersion(1, 0, 2);
+        return new SimpleVersion(1, 0, 3);
     }
 
     @Override

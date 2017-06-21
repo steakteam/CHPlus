@@ -24,12 +24,12 @@ public class PlayerWrapper {
     }
 
     public void sendPacket(PacketContainer... containers) {
-        try {
-            for (PacketContainer container : containers) {
+        for (PacketContainer container : containers) {
+            try {
                 ProtocolLibrary.getProtocolManager().sendServerPacket(player, container);
+            } catch (InvocationTargetException e) {
+                // Ignore
             }
-        } catch (InvocationTargetException e) {
-            // Ignore
         }
     }
 }

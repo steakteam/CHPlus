@@ -35,6 +35,7 @@ public class Packets {
             Class chatTypeClass = EnumWrappers.getChatTypeClass();
             StructureModifier components = packet.getSpecificModifier(chatTypeClass);
 
+            // TODO: ProtocolLib 4.3.1 안정화 시 제거
             try {
                 Method findByByte = chatTypeClass.getMethod("a", byte.class);
                 components.write(0, findByByte.invoke(null, type));
