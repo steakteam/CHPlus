@@ -36,7 +36,7 @@ public class Packets {
             StructureModifier components = packet.getSpecificModifier(chatTypeClass);
 
             try {
-                Method findByByte = chatTypeClass.getMethod("a");
+                Method findByByte = chatTypeClass.getMethod("a", byte.class);
                 components.write(0, findByByte.invoke(null, type));
             } catch (Exception e) {
                 // Ignore
@@ -56,7 +56,9 @@ public class Packets {
                 .createPacket(PacketType.Play.Server.TITLE);
 
         packet.getTitleActions().write(0, action);
-        packet.getChatComponents().write(0, WrappedChatComponent.fromText(content));
+        if (content != null) {
+            packet.getChatComponents().write(0, WrappedChatComponent.fromText(content));
+        }
 
         StructureModifier<Integer> modifier = packet.getIntegers();
         modifier.write(0, fadeIn);
