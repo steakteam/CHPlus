@@ -208,7 +208,7 @@ public class Functions {
 
     // Refer to CHExodius
     @api
-    public static class get_player_ping extends CHPlusFunction {
+    public static class user_input extends CHPlusFunction {
         @Override
         public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
             MCPlayer player = Static.GetPlayer(args[0], t);
@@ -250,7 +250,7 @@ public class Functions {
     }
 
     @api
-    public static class player_ping extends CHPlusFunction {
+    public static class get_player_ping extends CHPlusFunction {
         @Override
         public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
             // TODO
