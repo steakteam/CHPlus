@@ -4,6 +4,7 @@ import com.laytonsmith.PureUtilities.SimpleVersion;
 import com.laytonsmith.PureUtilities.Version;
 import com.laytonsmith.core.extensions.AbstractExtension;
 import com.laytonsmith.core.extensions.MSExtension;
+import kr.rvs.chplus.util.GUIHelper;
 import org.bukkit.Bukkit;
 
 /**
@@ -31,6 +32,8 @@ public class CHPlus extends AbstractExtension {
             System.out.println("[CHPlus] ProtocolLib not found.");
             throw new IllegalStateException("ProtocolLib not found.");
         }
+
+        GUIHelper.init();
     }
 
     @Override

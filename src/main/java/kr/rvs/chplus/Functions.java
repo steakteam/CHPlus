@@ -5,32 +5,39 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.laytonsmith.PureUtilities.Version;
 import com.laytonsmith.abstraction.MCFireworkEffect;
 import com.laytonsmith.abstraction.MCLocation;
+import com.laytonsmith.abstraction.MCPlayer;
 import com.laytonsmith.annotations.api;
 import com.laytonsmith.commandhelper.CommandHelperPlugin;
 import com.laytonsmith.core.CHVersion;
 import com.laytonsmith.core.ObjectGenerator;
 import com.laytonsmith.core.Static;
 import com.laytonsmith.core.constructs.CArray;
+import com.laytonsmith.core.constructs.CClosure;
+import com.laytonsmith.core.constructs.CInt;
 import com.laytonsmith.core.constructs.CVoid;
 import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.Environment;
 import com.laytonsmith.core.exceptions.CRE.CRECastException;
+import com.laytonsmith.core.exceptions.CRE.CREFormatException;
+import com.laytonsmith.core.exceptions.CRE.CREInvalidWorldException;
 import com.laytonsmith.core.exceptions.CRE.CREPlayerOfflineException;
 import com.laytonsmith.core.exceptions.CRE.CREThrowable;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
 import com.laytonsmith.core.functions.AbstractFunction;
+import kr.rvs.chplus.util.GUIHelper;
 import kr.rvs.chplus.util.Packets;
 import kr.rvs.chplus.util.PlayerWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Firework;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 
 import java.util.Collections;
 
 /**
  * Created by Junhyeong Lim on 2017-06-18.
  */
-@SuppressWarnings("unchecked")
 public class Functions {
     @api
     public static class set_tab_msg extends CHPlusFunction {
@@ -135,7 +142,11 @@ public class Functions {
     public static class launch_instant_firework extends AbstractFunction {
         @Override
         public Class<? extends CREThrowable>[] thrown() {
-            return new Class[0];
+            return new Class[]{
+                    CRECastException.class,
+                    CREFormatException.class,
+                    CREInvalidWorldException.class
+            };
         }
 
         @Override
@@ -161,11 +172,15 @@ public class Functions {
 
             MCFireworkEffect effect = ObjectGenerator.GetGenerator()
                     .fireworkEffect(array, t);
-            Firework firework = (Firework) location.getWorld().launchFirework(
+            final Firework firework = (Firework) location.getWorld().launchFirework(
                     location, 0, Collections.singletonList(effect)).getHandle();
 
-            Bukkit.getScheduler().runTaskLater(CommandHelperPlugin.self,
-                    firework::detonate, 2);
+            Bukkit.getScheduler().runTaskLater(CommandHelperPlugin.self, new Runnable() {
+                @Override
+                public void run() {
+                    firework.detonate();
+                }
+            }, 2);
 
             return CVoid.VOID;
         }
@@ -191,11 +206,76 @@ public class Functions {
         }
     }
 
+    // Refer to CHExodius
+    @api
+    public static class get_player_ping extends CHPlusFunction {
+        @Override
+        public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+            MCPlayer player = Static.GetPlayer(args[0], t);
+            CClosure closure = Static.getObject(args[1], t, CClosure.class);
+
+            GUIHelper helper = new GUIHelper(InventoryType.ANVIL)
+                    .putListener(0, new GUIHelper.Listener() {
+                        @Override
+                        public void onClick(InventoryClickEvent e) {
+                            // TODO
+                        }
+                    });
+
+            if (args.length >= 3) {
+                helper.setTitle(args[2].val());
+            }
+            if (args.length >= 4) {
+                helper.putItem(0,
+                        ObjectGenerator.GetGenerator().item(args[3], t));
+            }
+
+            helper.open(player);
+
+            return CVoid.VOID;
+        }
+
+        @Override
+        public Integer[] numArgs() {
+            return new Integer[]{2, 3, 4};
+        }
+
+        @Override
+        public String docs() {
+            return "void {player, callback closure, [inventory title], [item array]} " +
+                    "Open an Anvil GUI input for player, calling the callback closure when the player submits the input. " +
+                    "The text the player typed in gets returned to the closure. " +
+                    "Item can be an item array, already only the keys 'type', 'data' and 'display' are used. ";
+        }
+    }
+
+    @api
+    public static class player_ping extends CHPlusFunction {
+        @Override
+        public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+            // TODO
+            return new CInt(100, t);
+        }
+
+        @Override
+        public Integer[] numArgs() {
+            return new Integer[0];
+        }
+
+        @Override
+        public String docs() {
+            return null;
+        }
+    }
+
     static abstract class CHPlusFunction extends AbstractFunction {
         @Override
         public boolean isRestricted() {
             return true;
         }
+
+        @Override
+        public abstract Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException;
 
         @Override
         public Class<? extends CREThrowable>[] thrown() {
