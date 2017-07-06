@@ -85,7 +85,7 @@ if (@ping > 1000) {
 }
 ```
 
-### respawn(player])
+### chp_respawn(player])
 
 반환값: void
 
@@ -93,5 +93,5 @@ if (@ping > 1000) {
 
 예제:
 ```coffeescript
-respawn('EntryPoint')
+chp_respawn('EntryPoint')
 ```
