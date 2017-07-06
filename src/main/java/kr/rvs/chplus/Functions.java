@@ -214,7 +214,6 @@ public class Functions {
     // Refer to CHExodius
     @api
     public static class user_input extends CHPlusFunction {
-        private static final int INPUT_LEFT = 0;
         private static final int OUTPUT = 2;
 
         @Override

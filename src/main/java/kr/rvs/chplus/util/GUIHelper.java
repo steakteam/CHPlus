@@ -139,7 +139,7 @@ public class GUIHelper {
         return this;
     }
 
-    private <T> void notifyListeners(InventoryClickEvent e) {
+    private void notifyListeners(InventoryClickEvent e) {
         for (Listener listener : listeners) {
             listener.onClick(e);
         }
