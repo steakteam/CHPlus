@@ -3,6 +3,7 @@ package kr.rvs.chplus;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.laytonsmith.PureUtilities.Version;
+import com.laytonsmith.abstraction.MCCommandSender;
 import com.laytonsmith.abstraction.MCFireworkEffect;
 import com.laytonsmith.abstraction.MCLocation;
 import com.laytonsmith.abstraction.MCPlayer;
@@ -18,11 +19,12 @@ import com.laytonsmith.core.constructs.CString;
 import com.laytonsmith.core.constructs.CVoid;
 import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
+import com.laytonsmith.core.environments.CommandHelperEnvironment;
 import com.laytonsmith.core.environments.Environment;
 import com.laytonsmith.core.exceptions.CRE.CRECastException;
-import com.laytonsmith.core.exceptions.CRE.CREException;
 import com.laytonsmith.core.exceptions.CRE.CREFormatException;
 import com.laytonsmith.core.exceptions.CRE.CREInvalidWorldException;
+import com.laytonsmith.core.exceptions.CRE.CRELengthException;
 import com.laytonsmith.core.exceptions.CRE.CREPlayerOfflineException;
 import com.laytonsmith.core.exceptions.CRE.CREThrowable;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
@@ -291,16 +293,28 @@ public class Functions {
     }
 
     @api
-    public static class respawn extends CHPlusFunction {
+    public static class chp_respawn extends CHPlusFunction {
         @Override
         public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
-            MCPlayer player = Static.GetPlayer(args[0], t);
-            Player nativePlayer = (Player) player.getHandle();
+            Player player = null;
+
+            if (args.length > 0) {
+                player = (Player) Static.GetPlayer(args[0], t).getHandle();
+            } else {
+                MCCommandSender sender = env.getEnv(CommandHelperEnvironment.class).GetCommandSender();
+                if (sender instanceof MCPlayer) {
+                    player = (Player) sender.getHandle();
+                } else {
+                    throw new CREFormatException("\"" + sender.getName() + "\" isn't player.", t);
+                }
+            }
 
             try {
-                nativePlayer.spigot().respawn();
+                if (player != null) {
+                    player.spigot().respawn();
+                }
             } catch (Throwable th) {
-                throw new CREException("Can't use spigot method.", t);
+                throw new CREFormatException("Can't use spigot method. Your bukkit isn't spigot?", t);
             }
 
             return CVoid.VOID;
@@ -308,7 +322,7 @@ public class Functions {
 
         @Override
         public Integer[] numArgs() {
-            return new Integer[]{1};
+            return new Integer[]{0, 1};
         }
 
         @Override
@@ -331,7 +345,9 @@ public class Functions {
         public Class<? extends CREThrowable>[] thrown() {
             return new Class[]{
                     CREPlayerOfflineException.class,
-                    CRECastException.class
+                    CRECastException.class,
+                    CRELengthException.class,
+                    CREFormatException.class
             };
         }
 

@@ -10,7 +10,10 @@
 
 설명: 해당 플레이어의 탭창의 헤더와 푸터를 설정합니다.
 
-예제: set_tab_msg('EntryPoint', 'Header', 'Footer')
+예제: 
+```coffeescript
+set_tab_msg('EntryPoint', 'Header', 'Footer')
+```
 
 ### send_action_msg(player, text)
 
@@ -26,7 +29,10 @@
 
 설명: 해당 플레이어에게 타이틀 메세지를 보냅니다.
 
-예제: send_title_msg('EntryPoint', 'Title', 'Subtitle', 20, 20, 20)
+예제: 
+```coffeescript
+send_title_msg('EntryPoint', 'Title', 'Subtitle', 20, 20, 20)
+````
 
 ### send_json_msg(player, json)
 
@@ -40,6 +46,52 @@
 
 설명: 해당 위치에 즉시 터지는 폭죽을 발사합니다.
 
-예제: launch_instant_firework(array('x': 1, 'y': 2, 'z': 3, 'world': 'world'))
+예제: 
+```coffeescript
+launch_instant_firework(array('x': 1, 'y': 2, 'z': 3, 'world': 'world'))
+```
 
+### user_input(player, closure, [itemArray])
 
+반환값: void
+
+설명: 모루 GUI 로 플레이어의 입력값을 closure 로 받습니다.
+
+예제: 
+```coffeescript
+@callback = closure(@msg) {
+  'EntryPoint 님이' @msg '를 입력했습니다.'
+}
+@item = array(
+  id: 421, data: 0, qty: 1,
+  meta: array(
+    'display': '이곳에 입력하세요.'
+  )
+)
+user_input('EntryPoint', @callback, @item);
+```
+
+### pping(player)
+
+반환값: int
+
+설명: 해당 플레이어의 핑 값을 불러옵니다.
+
+예제:
+```coffeescript
+@ping = pping('EntryPoint')
+if (@pint > 1000) {
+  tmsg('EntryPoint', '핑이 너무 높습니다.')
+}
+```
+
+### respawn(player])
+
+반환값: void
+
+설명: 해당 플레이어를 리스폰시킵니다.
+
+예제:
+```coffeescript
+respawn('EntryPoint')
+```

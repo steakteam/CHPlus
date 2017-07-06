@@ -1,6 +1,7 @@
 package kr.rvs.chplus.util.wrapper;
 
 import kr.rvs.chplus.util.Static;
+import kr.rvs.chplus.util.Storage;
 import org.bukkit.inventory.Inventory;
 
 import java.lang.reflect.Field;
@@ -9,17 +10,15 @@ import java.lang.reflect.Method;
 /**
  * Created by Junhyeong Lim on 2017-07-05.
  */
-public class AnvilContainerWrapper {
-    private final Object object;
-
+public class AnvilContainerWrapper extends Storage {
     public AnvilContainerWrapper(Object object) {
-        this.object = object;
+        super(object);
     }
 
     public Inventory getTopInventory() {
         try {
-            Method getBukkitView = object.getClass().getMethod("getBukkitView");
-            Object bukkitView = getBukkitView.invoke(object);
+            Method getBukkitView = getHandle().getClass().getMethod("getBukkitView");
+            Object bukkitView = getBukkitView.invoke(getHandle());
             Method topInventory = bukkitView.getClass().getMethod("getTopInventory");
 
             return (Inventory) topInventory.invoke(bukkitView);
@@ -30,8 +29,8 @@ public class AnvilContainerWrapper {
 
     public void setWindowId(int counter) {
         try {
-            Field windowIdField = object.getClass().getSuperclass().getField("windowId");
-            windowIdField.set(object, counter);
+            Field windowIdField = getHandle().getClass().getSuperclass().getField("windowId");
+            windowIdField.set(getHandle(), counter);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,15 +38,11 @@ public class AnvilContainerWrapper {
 
     public void addSlotListener(PlayerWrapper playerWrapper) {
         try {
-            Method addSlotListenerMethod = object.getClass().getMethod("addSlotListener",
+            Method addSlotListenerMethod = getHandle().getClass().getMethod("addSlotListener",
                     Static.getNMSClass("ICrafting"));
-            addSlotListenerMethod.invoke(object, playerWrapper.getEntityPlayer());
+            addSlotListenerMethod.invoke(getHandle(), playerWrapper.getEntityPlayer());
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public Object getHandle() {
-        return object;
     }
 }
