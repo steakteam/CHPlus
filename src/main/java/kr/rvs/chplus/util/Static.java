@@ -1,10 +1,8 @@
 package kr.rvs.chplus.util;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Server;
+import com.comphenix.protocol.wrappers.EnumWrappers;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 
 /**
  * Created by Junhyeong Lim on 2017-07-05.
@@ -15,16 +13,9 @@ public class Static {
 
     public static String getNMSPackage(String name) {
         if (nmsPackageName == null) {
-            Server server = Bukkit.getServer();
-            try {
-                Field consoleField = server.getClass().getDeclaredField("console");
-                consoleField.setAccessible(true);
-                String packageName = consoleField.get(server).getClass().getName();
-                nmsPackageName = packageName.substring(0,
-                        packageName.indexOf(".", 29));
-            } catch (Throwable e) {
-                // Ignore
-            }
+            String packageName = EnumWrappers.getProtocolClass().getName();
+            nmsPackageName = packageName.substring(0,
+                    packageName.lastIndexOf("."));
         }
 
         return nmsPackageName + "." + name;

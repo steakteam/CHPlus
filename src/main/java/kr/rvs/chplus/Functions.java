@@ -238,6 +238,7 @@ public class Functions {
                                         name = meta.getDisplayName();
                                 }
 
+                                e.getView().getTopInventory().clear();
                                 e.getWhoClicked().closeInventory();
                                 closure.execute(new CString(name, t));
                             }

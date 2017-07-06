@@ -119,8 +119,8 @@ public class GUIHelper {
             playerWrapper.setActiveContainer(containerWrapper.getHandle());
         } else {
             nativePlayer.openInventory(build());
-            putEntity(nativePlayer, this);
         }
+        putEntity(nativePlayer, this);
 
         return this;
     }
@@ -161,9 +161,7 @@ public class GUIHelper {
             if (helper == null)
                 return;
 
-            if (action == InventoryAction.NOTHING) {
-                return;
-            } else if (action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+            if (action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
                 rawSlot = inv.firstEmpty();
             } else if (action == InventoryAction.COLLECT_TO_CURSOR) {
                 for (int i = 0; i < inv.getSize(); i++) {
