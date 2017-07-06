@@ -80,7 +80,7 @@ user_input('EntryPoint', @callback, @item);
 예제:
 ```coffeescript
 @ping = pping('EntryPoint')
-if (@pint > 1000) {
+if (@ping > 1000) {
   tmsg('EntryPoint', '핑이 너무 높습니다.')
 }
 ```
