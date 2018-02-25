@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 
 public class ServerPingProtocolListener {
     private PacketAdapter adapter;
+
     public ServerPingProtocolListener() {
         adapter = new PacketAdapter(PacketAdapter.params(Bukkit.getPluginManager().getPlugin("CommandHelper"), PacketType.Status.Server.SERVER_INFO).optionAsync()) {
             @Override

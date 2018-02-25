@@ -5,13 +5,11 @@ import com.laytonsmith.annotations.api;
 import com.laytonsmith.core.CHVersion;
 import com.laytonsmith.core.Static;
 import com.laytonsmith.core.constructs.CArray;
-import com.laytonsmith.core.constructs.CInt;
 import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.events.AbstractEvent;
 import com.laytonsmith.core.events.BindableEvent;
 import com.laytonsmith.core.events.Driver;
-import com.laytonsmith.core.exceptions.CRE.CRECastException;
 import com.laytonsmith.core.exceptions.EventException;
 import com.laytonsmith.core.exceptions.PrefilterNonMatchException;
 import kr.rvs.chplus.events.MCServerPingProtocolEvent;
@@ -55,7 +53,7 @@ public class Events {
 
         @Override
         public Map<String, Construct> evaluate(BindableEvent bindableEvent) throws EventException {
-            if(bindableEvent instanceof MCServerPingProtocolEvent) {
+            if (bindableEvent instanceof MCServerPingProtocolEvent) {
                 MCServerPingProtocolEvent e = (MCServerPingProtocolEvent) bindableEvent;
                 Target t = Target.UNKNOWN;
                 Map<String, Construct> ret = new HashMap<>();
@@ -73,9 +71,9 @@ public class Events {
 
         @Override
         public boolean modifyEvent(String s, Construct construct, BindableEvent bindableEvent) {
-            if(bindableEvent instanceof MCServerPingProtocolEvent) {
+            if (bindableEvent instanceof MCServerPingProtocolEvent) {
                 MCServerPingProtocolEvent e = (MCServerPingProtocolEvent) bindableEvent;
-                if(s.equalsIgnoreCase("players")) {
+                if (s.equalsIgnoreCase("players")) {
                     e.setPlayerCount(Static.getInt32(construct, construct.getTarget()));
                     return true;
                 }

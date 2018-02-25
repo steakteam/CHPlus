@@ -2,7 +2,6 @@ package kr.rvs.chplus.events.bukkit;
 
 
 import com.comphenix.protocol.wrappers.WrappedServerPing;
-import com.laytonsmith.core.Static;
 import com.laytonsmith.core.constructs.CInt;
 import com.laytonsmith.core.constructs.Target;
 import kr.rvs.chplus.events.MCServerPingProtocolEvent;
@@ -11,8 +10,8 @@ import org.bukkit.event.HandlerList;
 
 public class BukkitMCServerPingProtocolEvent extends Event implements MCServerPingProtocolEvent {
 
-    WrappedServerPing event;
     private static final HandlerList handlers = new HandlerList();
+    WrappedServerPing event;
 
     public BukkitMCServerPingProtocolEvent(WrappedServerPing e) {
         event = e;
