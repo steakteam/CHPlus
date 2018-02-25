@@ -244,10 +244,7 @@ public class Functions {
                                 clickEvent.getWhoClicked().closeInventory();
                                 closure.execute(new CString(name, t));
                             }
-                        }
-                    })
-                    .putListener(e -> {
-                        if (e instanceof InventoryCloseEvent) {
+                        } else if (e instanceof InventoryCloseEvent) {
                             e.getInventory().clear();
                         }
                     });
