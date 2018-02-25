@@ -15,7 +15,7 @@ apply plugin: 'java'
 apply plugin: "com.github.johnrengelman.shadow"
 
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 test.testLogging.showStandardStreams = true
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -48,7 +48,8 @@ shadowJar {
         include dependency('cglib:cglib:3.2.5')
         include dependency('org.ow2.asm:asm:5.2')
     }
-    relocate 'net.sf', 'kr.rvs.chplus.net.sf'
+    relocate 'net.sf', 'kr.rvs.chplus.libs.net.sf'
+    relocate 'org.objectweb', 'kr.rvs.chplus.libs.org.objectweb'
 }
 
 artifacts {

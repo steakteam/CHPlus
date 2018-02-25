@@ -6,7 +6,10 @@ import com.laytonsmith.core.extensions.AbstractExtension;
 import com.laytonsmith.core.extensions.MSExtension;
 import kr.rvs.chplus.events.bukkit.ServerPingProtocolListener;
 import kr.rvs.chplus.util.GUIHelper;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
+
+import java.util.logging.Level;
 
 /**
  * Created by Junhyeong Lim on 2017-06-18.
@@ -29,20 +32,17 @@ public class CHPlus extends AbstractExtension {
 
     @Override
     public void onStartup() {
-        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-            System.out.println("CHPlus " + getVersion() + " enabled.");
-        } else {
-            System.out.println("[CHPlus] ProtocolLib not found.");
-            throw new IllegalStateException("ProtocolLib not found.");
-        }
+        Validate.isTrue(Bukkit.getPluginManager().isPluginEnabled("ProtocolLib"), "[CHPlus] ProtocolLib not found.");
 
         GUIHelper.init();
         sppl = new ServerPingProtocolListener();
+        Bukkit.getLogger().log(Level.INFO, "CHPlus " + getVersion() + " enabled.");
     }
 
     @Override
     public void onShutdown() {
+        GUIHelper.unregister();
         sppl.unregister();
-        System.out.println("CHPlus " + getVersion() + " disabled.");
+        Bukkit.getLogger().log(Level.INFO, "CHPlus " + getVersion() + " disabled.");
     }
 }

@@ -36,6 +36,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -224,15 +225,15 @@ public class Functions {
             final CClosure closure = Static.getObject(args[1], t, CClosure.class);
 
             GUIHelper helper = new GUIHelper(InventoryType.ANVIL)
-                    .putListener(new GUIHelper.Listener() {
-                        @Override
-                        public void onClick(InventoryClickEvent e) {
-                            e.setCancelled(true);
-                            int rawSlot = e.getRawSlot();
+                    .putListener(e -> {
+                        if (e instanceof InventoryClickEvent) {
+                            InventoryClickEvent clickEvent = ((InventoryClickEvent) e);
+                            clickEvent.setCancelled(true);
+                            int rawSlot = clickEvent.getRawSlot();
                             if (rawSlot == OUTPUT) {
                                 // Get input
                                 String name = "";
-                                ItemStack item = e.getCurrentItem();
+                                ItemStack item = clickEvent.getCurrentItem();
                                 if (item != null && item.hasItemMeta()) {
                                     ItemMeta meta = item.getItemMeta();
                                     if (meta.getDisplayName() != null)
@@ -240,9 +241,14 @@ public class Functions {
                                 }
 
                                 e.getView().getTopInventory().clear();
-                                e.getWhoClicked().closeInventory();
+                                clickEvent.getWhoClicked().closeInventory();
                                 closure.execute(new CString(name, t));
                             }
+                        }
+                    })
+                    .putListener(e -> {
+                        if (e instanceof InventoryCloseEvent) {
+                            e.getInventory().clear();
                         }
                     });
 

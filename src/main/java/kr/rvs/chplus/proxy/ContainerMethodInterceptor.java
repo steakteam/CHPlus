@@ -12,7 +12,8 @@ public class ContainerMethodInterceptor implements MethodInterceptor {
     @Override
     public Object intercept(Object o, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         Object ret;
-        if (method.getName().equals("a") && args.length == 1
+        String methodName = method.getName();
+        if ((methodName.equals("a") || methodName.equals("canUse")) && args.length == 1
                 && method.getParameterTypes()[0].getSimpleName().equals("EntityHuman")) {
             ret = isReachable();
         } else {

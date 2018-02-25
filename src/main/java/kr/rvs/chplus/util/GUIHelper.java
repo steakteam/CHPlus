@@ -11,18 +11,21 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -30,17 +33,11 @@ import java.util.UUID;
  * Created by Junhyeong Lim on 2017-07-05.
  */
 public class GUIHelper {
-    private static final org.bukkit.event.Listener INTERNAL_LISTENER = new InternalListener();
+    private static final Listener INTERNAL_LISTENER = new InternalListener();
     private static final Map<UUID, GUIHelper> HELPER_MAP = new HashMap<>();
 
-    static {
-        Plugin chPlugin = CommandHelperPlugin.self;
-        Bukkit.getPluginManager().registerEvents(
-                INTERNAL_LISTENER, chPlugin);
-    }
-
     private final InventoryType type;
-    private Set<Listener> listeners = new HashSet<>();
+    private Set<GUIHandler> listeners = new HashSet<>();
     private Map<Integer, ItemStack> itemMap = new HashMap<>();
     private String title;
     private int size = 9;
@@ -51,10 +48,16 @@ public class GUIHelper {
     }
 
     public static void init() {
+        Bukkit.getPluginManager().registerEvents(
+                INTERNAL_LISTENER, CommandHelperPlugin.self);
     }
 
-    private static void close(Entity entity) {
-        HELPER_MAP.remove(entity.getUniqueId());
+    public static void unregister() {
+        HandlerList.unregisterAll(INTERNAL_LISTENER);
+    }
+
+    private static GUIHelper release(Entity entity) {
+        return HELPER_MAP.remove(entity.getUniqueId());
     }
 
     private static GUIHelper getHelper(Entity entity) {
@@ -80,13 +83,9 @@ public class GUIHelper {
     }
 
     public Inventory build() {
-        Inventory inv;
-        if (this.type == InventoryType.CHEST) {
-            inv = Bukkit.createInventory(null, size, title);
-        } else {
-            inv = Bukkit.createInventory(null, type, title);
-        }
-
+        Inventory inv = this.type == InventoryType.CHEST
+                ? Bukkit.createInventory(null, size, title)
+                : Bukkit.createInventory(null, type, title);
         setItemToInventory(inv);
         return inv;
     }
@@ -125,7 +124,7 @@ public class GUIHelper {
         return this;
     }
 
-    public GUIHelper putListener(Listener listener) {
+    public GUIHelper putListener(GUIHandler listener) {
         listeners.add(listener);
         return this;
     }
@@ -139,14 +138,12 @@ public class GUIHelper {
         return this;
     }
 
-    private void notifyListeners(InventoryClickEvent e) {
-        for (Listener listener : listeners) {
-            listener.onClick(e);
-        }
+    private void notifyListeners(InventoryEvent e) {
+        listeners.forEach(listener -> listener.onEvent(e));
     }
 
-    public interface Listener {
-        void onClick(InventoryClickEvent e);
+    public interface GUIHandler {
+        void onEvent(InventoryEvent e);
     }
 
     private static class InternalListener implements org.bukkit.event.Listener {
@@ -181,12 +178,13 @@ public class GUIHelper {
 
         @EventHandler
         public void onClose(InventoryCloseEvent e) {
-            close(e.getPlayer());
+            Optional.ofNullable(release(e.getPlayer())).ifPresent(helper ->
+                    helper.notifyListeners(e));
         }
 
         @EventHandler
         public void onQuit(PlayerQuitEvent e) {
-            close(e.getPlayer());
+            release(e.getPlayer());
         }
     }
 }
