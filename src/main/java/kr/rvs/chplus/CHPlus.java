@@ -24,7 +24,7 @@ public class CHPlus extends AbstractExtension {
 
     @Override
     public Version getVersion() {
-        return new SimpleVersion(1, 1, 0);
+        return new SimpleVersion(1, 3, 0);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class CHPlus extends AbstractExtension {
 
     @Override
     public void onShutdown() {
-        System.out.println("CHPlus " + getVersion() + " disabled.");
         sppl.unregister();
+        System.out.println("CHPlus " + getVersion() + " disabled.");
     }
 }
