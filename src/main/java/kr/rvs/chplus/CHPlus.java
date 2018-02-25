@@ -27,7 +27,7 @@ public class CHPlus extends AbstractExtension {
 
     @Override
     public Version getVersion() {
-        return new SimpleVersion(1, 3, 0);
+        return new SimpleVersion(1, 3, 1);
     }
 
     @Override
