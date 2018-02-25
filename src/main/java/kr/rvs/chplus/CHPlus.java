@@ -4,6 +4,7 @@ import com.laytonsmith.PureUtilities.SimpleVersion;
 import com.laytonsmith.PureUtilities.Version;
 import com.laytonsmith.core.extensions.AbstractExtension;
 import com.laytonsmith.core.extensions.MSExtension;
+import kr.rvs.chplus.events.bukkit.ServerPingProtocolListener;
 import kr.rvs.chplus.util.GUIHelper;
 import org.bukkit.Bukkit;
 
@@ -18,6 +19,8 @@ public class CHPlus extends AbstractExtension {
     // TODO: ProtocolLib 4.3.1 안정화 시 제거
     public static final byte CHAT_TYPE_SYSTEM = 1;
     public static final byte CHAT_TYPE_GAME_INFO = 2;
+
+    private static ServerPingProtocolListener sppl;
 
     @Override
     public Version getVersion() {
@@ -34,10 +37,12 @@ public class CHPlus extends AbstractExtension {
         }
 
         GUIHelper.init();
+        sppl = new ServerPingProtocolListener();
     }
 
     @Override
     public void onShutdown() {
         System.out.println("CHPlus " + getVersion() + " disabled.");
+        sppl.unregister();
     }
 }

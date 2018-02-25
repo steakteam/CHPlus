@@ -95,3 +95,8 @@ if (@ping > 1000) {
 ```coffeescript
 chp_respawn('EntryPoint')
 ```
+
+## 이벤트
+
+### server_ping_protocol
+일반적인 `server_ping` 이벤트와 동일하지만 이벤트 데이터가 `players`(현재 온라인 플레이어의 수) 밖에 없으며, 이 필드는 수정 가능합니다.(원래 플레이어 수 이상도 가능)

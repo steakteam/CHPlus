@@ -25,7 +25,7 @@ repositories {
     mavenCentral()
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     maven { url 'http://mvn2.sk89q.com/repo' }
-    maven { url 'http://repo.dmulloy2.net/content/groups/public/' }
+    maven { url 'http://repo.dmulloy2.net/nexus/repository/public/' }
 }
 
 dependencies {
@@ -35,7 +35,7 @@ dependencies {
     compile('com.sk89q:commandhelper:3.3.2-SNAPSHOT') {
         exclude module: 'spigot-api'
     }
-    compile(group: 'com.comphenix.protocol', name: 'ProtocolLib-API', version: '4.3.1-SNAPSHOT') {
+    compile(group: 'com.comphenix.protocol', name: 'ProtocolLib-API', version: '4.4.0-SNAPSHOT') {
         exclude module: 'cglib-nodep'
     }
     compile group: 'cglib', name: 'cglib', version: '3.2.5'
