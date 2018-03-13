@@ -14,7 +14,6 @@ group 'kr.rvs.chplus'
 apply plugin: 'java'
 apply plugin: "com.github.johnrengelman.shadow"
 
-
 sourceCompatibility = 1.8
 
 test.testLogging.showStandardStreams = true
@@ -40,6 +39,7 @@ dependencies {
     }
     compile group: 'cglib', name: 'cglib', version: '3.2.5'
     compile group: 'org.ow2.asm', name: 'asm', version: '5.2'
+    compile group: 'io.netty', name: 'netty-buffer', version: '4.1.22.Final'
 }
 
 shadowJar {

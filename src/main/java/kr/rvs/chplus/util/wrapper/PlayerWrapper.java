@@ -2,10 +2,11 @@ package kr.rvs.chplus.util.wrapper;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
+import com.laytonsmith.abstraction.MCPlayer;
 import com.laytonsmith.core.Static;
 import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
-import kr.rvs.chplus.util.Storage;
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
@@ -15,21 +16,40 @@ import java.lang.reflect.Method;
 /**
  * Created by Junhyeong Lim on 2017-06-18.
  */
-public class PlayerWrapper extends Storage<Player> {
-    private Object entityPlayer;
+public class PlayerWrapper {
+    private final Player player;
+    private final Object entityPlayer;
 
-    public PlayerWrapper(Player handle) {
-        super(handle);
+    public static PlayerWrapper of(Player player) {
+        try {
+            Method getHandleMethod = player.getClass().getMethod("getHandle");
+            Object entityPlayer = getHandleMethod.invoke(player);
+
+            return new PlayerWrapper(player, entityPlayer);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Failed wrapping player");
+        }
     }
 
-    public PlayerWrapper(Construct name, Target t) {
-        this((Player) Static.GetPlayer(name, t).getHandle());
+    public static PlayerWrapper of(MCPlayer mcPlayer) {
+        Object handle = mcPlayer.getHandle();
+        Validate.isTrue(handle instanceof Player);
+        return of((Player) handle);
+    }
+
+    public static PlayerWrapper of(Construct name, Target t) {
+        return of(Static.GetPlayer(name, t));
+    }
+
+    private PlayerWrapper(Player player, Object entityPlayer) {
+        this.player = player;
+        this.entityPlayer = entityPlayer;
     }
 
     public void sendPacket(PacketContainer... containers) {
         for (PacketContainer container : containers) {
             try {
-                ProtocolLibrary.getProtocolManager().sendServerPacket(getHandle(), container);
+                ProtocolLibrary.getProtocolManager().sendServerPacket(player, container);
             } catch (InvocationTargetException e) {
                 // Ignore
             }
@@ -37,11 +57,9 @@ public class PlayerWrapper extends Storage<Player> {
     }
 
     public int nextContainerCounter() {
-        Object entityPlayer = getEntityPlayer();
         try {
-            Field containerCounterField = entityPlayer.getClass().getDeclaredField("containerCounter");
-            containerCounterField.setAccessible(true);
-            return (int) containerCounterField.get(entityPlayer);
+            Method increaseMethod = entityPlayer.getClass().getDeclaredMethod("nextContainerCounter");
+            return (int) increaseMethod.invoke(entityPlayer);
         } catch (Exception e) {
             throw new IllegalStateException("Can't get a containerCounter value");
         }
@@ -49,7 +67,6 @@ public class PlayerWrapper extends Storage<Player> {
 
     public int getPing() {
         int ret = -1;
-        Object entityPlayer = getEntityPlayer();
         try {
             Field pingField = entityPlayer.getClass().getField("ping");
             ret = (int) pingField.get(entityPlayer);
@@ -60,21 +77,7 @@ public class PlayerWrapper extends Storage<Player> {
         return ret;
     }
 
-    public Object getEntityPlayer() {
-        if (entityPlayer == null) {
-            try {
-                Method getHandleMethod = getHandle().getClass().getMethod("getHandle");
-                entityPlayer = getHandleMethod.invoke(getHandle());
-            } catch (Exception e) {
-                throw new IllegalStateException("Can't invoke a getHandle method");
-            }
-        }
-
-        return entityPlayer;
-    }
-
     public void setActiveContainer(Object container) {
-        Object entityPlayer = getEntityPlayer();
         try {
             Field activeContainerField = entityPlayer.getClass().getSuperclass().getField("activeContainer");
             activeContainerField.set(entityPlayer, container);
@@ -84,22 +87,24 @@ public class PlayerWrapper extends Storage<Player> {
     }
 
     public Object getPlayerInventory() {
-        Object entityPlayer = getEntityPlayer();
         try {
             Field playerInventoryField = entityPlayer.getClass().getSuperclass().getField("inventory");
-            return playerInventoryField.get(getEntityPlayer());
+            return playerInventoryField.get(entityPlayer);
         } catch (Exception e) {
             throw new IllegalStateException("Can't get a inventory value");
         }
     }
 
     public Object getWorld() {
-        Object entityPlayer = getEntityPlayer();
         try {
             Field worldField = entityPlayer.getClass().getSuperclass().getField("world");
-            return worldField.get(getEntityPlayer());
+            return worldField.get(entityPlayer);
         } catch (Exception e) {
             throw new IllegalStateException("Can't get a world value");
         }
+    }
+
+    public Object getEntityPlayer() {
+        return entityPlayer;
     }
 }

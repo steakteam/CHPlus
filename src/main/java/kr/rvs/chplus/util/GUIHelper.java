@@ -2,6 +2,7 @@ package kr.rvs.chplus.util;
 
 import com.laytonsmith.abstraction.MCItemStack;
 import com.laytonsmith.abstraction.MCPlayer;
+import com.laytonsmith.abstraction.bukkit.BukkitMCInventory;
 import com.laytonsmith.commandhelper.CommandHelperPlugin;
 import kr.rvs.chplus.proxy.ContainerMethodInterceptor;
 import kr.rvs.chplus.util.wrapper.AnvilContainerWrapper;
@@ -99,7 +100,7 @@ public class GUIHelper {
     public GUIHelper open(MCPlayer player) {
         final Player nativePlayer = (Player) player.getHandle();
         if (type == InventoryType.ANVIL) {
-            PlayerWrapper playerWrapper = new PlayerWrapper(nativePlayer);
+            PlayerWrapper playerWrapper = PlayerWrapper.of(nativePlayer);
             AnvilContainerWrapper containerWrapper = CHPlusFactory.createAnvilContainer(
                     new ContainerMethodInterceptor(), playerWrapper);
             Inventory inv = containerWrapper.getTopInventory();
@@ -108,14 +109,15 @@ public class GUIHelper {
 
             playerWrapper.sendPacket(
                     CHPlusFactory.createOpenWindowPacket(
-                            counter, "minecraft:anvil", CHPlusFactory.createChatMessage("Repairing")
-                    ),
-                    CHPlusFactory.createSetSlotPacket(0, 0, itemMap.get(0))
+                            counter,
+                            "minecraft:anvil",
+                            CHPlusFactory.createChatMessage("Repairing")
+                    )
             );
 
+            playerWrapper.setActiveContainer(containerWrapper.getHandle());
             containerWrapper.setWindowId(counter);
             containerWrapper.addSlotListener(playerWrapper);
-            playerWrapper.setActiveContainer(containerWrapper.getHandle());
         } else {
             nativePlayer.openInventory(build());
         }

@@ -1,4 +1,4 @@
-package kr.rvs.chplus.events.bukkit;
+package kr.rvs.chplus.event.internal.bukkit;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;

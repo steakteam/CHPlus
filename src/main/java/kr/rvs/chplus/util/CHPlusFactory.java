@@ -4,10 +4,13 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
+import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import io.netty.buffer.Unpooled;
 import kr.rvs.chplus.CHPlus;
 import kr.rvs.chplus.util.wrapper.AnvilContainerWrapper;
+import kr.rvs.chplus.util.wrapper.PacketDataSerializerWrapper;
 import kr.rvs.chplus.util.wrapper.PlayerWrapper;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -59,32 +62,6 @@ public class CHPlusFactory {
         return packet;
     }
 
-    public static PacketContainer createTitlePacket(EnumWrappers.TitleAction action, String content,
-                                                    int fadeIn, int stay, int fadeOut) {
-        PacketContainer packet = ProtocolLibrary.getProtocolManager()
-                .createPacket(PacketType.Play.Server.TITLE);
-
-        packet.getTitleActions().write(0, action);
-        if (content != null) {
-            packet.getChatComponents().write(0, WrappedChatComponent.fromText(content));
-        }
-
-        StructureModifier<Integer> modifier = packet.getIntegers();
-        modifier.write(0, fadeIn);
-        modifier.write(1, stay);
-        modifier.write(2, fadeOut);
-
-        return packet;
-    }
-
-    public static PacketContainer createTitlePacket(EnumWrappers.TitleAction action, String content) {
-        return createTitlePacket(action, content, -1, -1, -1);
-    }
-
-    public static PacketContainer createTitlePacket(int fadeIn, int stay, int fadeOut) {
-        return createTitlePacket(EnumWrappers.TitleAction.TIMES, null, fadeIn, stay, fadeOut);
-    }
-
     public static PacketContainer createOpenWindowPacket(int next, String type, WrappedChatComponent component) {
         PacketContainer packet = ProtocolLibrary.getProtocolManager()
                 .createPacket(PacketType.Play.Server.OPEN_WINDOW);
@@ -105,6 +82,20 @@ public class CHPlusFactory {
         modifier.write(0, type);
         modifier.write(1, slot);
         packet.getItemModifier().write(0, item);
+
+        return packet;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static PacketContainer createCustomPayload(String channel, EnumWrappers.Hand hand) {
+        PacketContainer packet = ProtocolLibrary.getProtocolManager()
+                .createPacket(PacketType.Play.Server.CUSTOM_PAYLOAD);
+        PacketDataSerializerWrapper serializerWrapper = PacketDataSerializerWrapper.of(Unpooled.buffer())
+                .writeEnum(hand);
+        StructureModifier serializerModifier = packet.getSpecificModifier(MinecraftReflection.getPacketDataSerializerClass());
+
+        packet.getStrings().write(0, channel);
+        serializerModifier.write(0, serializerWrapper.getHandle());
 
         return packet;
     }

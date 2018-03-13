@@ -4,7 +4,7 @@ import com.laytonsmith.PureUtilities.SimpleVersion;
 import com.laytonsmith.PureUtilities.Version;
 import com.laytonsmith.core.extensions.AbstractExtension;
 import com.laytonsmith.core.extensions.MSExtension;
-import kr.rvs.chplus.events.bukkit.ServerPingProtocolListener;
+import kr.rvs.chplus.event.internal.bukkit.ServerPingProtocolListener;
 import kr.rvs.chplus.util.GUIHelper;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -27,7 +27,7 @@ public class CHPlus extends AbstractExtension {
 
     @Override
     public Version getVersion() {
-        return new SimpleVersion(1, 3, 1);
+        return new SimpleVersion(1, 4, 0);
     }
 
     @Override

@@ -1,10 +1,10 @@
-package kr.rvs.chplus.events.bukkit;
+package kr.rvs.chplus.event.internal.bukkit;
 
 
 import com.comphenix.protocol.wrappers.WrappedServerPing;
 import com.laytonsmith.core.constructs.CInt;
 import com.laytonsmith.core.constructs.Target;
-import kr.rvs.chplus.events.MCServerPingProtocolEvent;
+import kr.rvs.chplus.event.internal.MCServerPingProtocolEvent;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 

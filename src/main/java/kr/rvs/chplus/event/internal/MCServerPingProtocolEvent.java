@@ -1,4 +1,4 @@
-package kr.rvs.chplus.events;
+package kr.rvs.chplus.event.internal;
 
 import com.laytonsmith.core.constructs.CInt;
 import com.laytonsmith.core.constructs.Target;
