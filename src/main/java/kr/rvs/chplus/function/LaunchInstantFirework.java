@@ -29,25 +29,15 @@ public class LaunchInstantFirework extends CHPlusFunction {
     @Override
     public Construct exec(Target t, Environment environment, Construct... args) throws ConfigRuntimeException {
         MCLocation location = ObjectGenerator.GetGenerator().location(args[0], null, t);
-        CArray array;
-
-        if (args.length >= 2) {
-            array = Static.getArray(args[1], t);
-        } else {
-            array = CArray.GetAssociativeArray(t);
-        }
-
+        CArray array = args.length >= 2
+                ? Static.getArray(args[1], t)
+                : CArray.GetAssociativeArray(t);
         MCFireworkEffect effect = ObjectGenerator.GetGenerator()
                 .fireworkEffect(array, t);
-        final Firework firework = (Firework) location.getWorld().launchFirework(
+        Firework firework = (Firework) location.getWorld().launchFirework(
                 location, 0, Collections.singletonList(effect)).getHandle();
 
-        Bukkit.getScheduler().runTaskLater(CommandHelperPlugin.self, new Runnable() {
-            @Override
-            public void run() {
-                firework.detonate();
-            }
-        }, 2);
+        Bukkit.getScheduler().runTaskLater(CommandHelperPlugin.self, firework::detonate, 2);
 
         return CVoid.VOID;
     }
@@ -73,6 +63,6 @@ public class LaunchInstantFirework extends CHPlusFunction {
 
     @Override
     public String docs() {
-        return null;
+        return "void {locationArray, [fireworkArray]}";
     }
 }

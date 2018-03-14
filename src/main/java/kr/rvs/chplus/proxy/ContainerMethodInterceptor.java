@@ -11,16 +11,11 @@ import java.lang.reflect.Method;
 public class ContainerMethodInterceptor implements MethodInterceptor {
     @Override
     public Object intercept(Object o, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
-        Object ret;
         String methodName = method.getName();
-        if ((methodName.equals("a") || methodName.equals("canUse")) && args.length == 1
-                && method.getParameterTypes()[0].getSimpleName().equals("EntityHuman")) {
-            ret = isReachable();
-        } else {
-            ret = methodProxy.invokeSuper(o, args);
-        }
+        return (methodName.equals("a") || methodName.equals("canUse"))
+                && args.length == 1 && method.getParameterTypes()[0].getSimpleName().equals("EntityHuman")
 
-        return ret;
+                ? isReachable() : methodProxy.invokeSuper(o, args);
     }
 
     private boolean isReachable() {

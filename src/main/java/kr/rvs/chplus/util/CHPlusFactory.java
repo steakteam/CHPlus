@@ -7,6 +7,8 @@ import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.laytonsmith.abstraction.MCItemStack;
+import com.laytonsmith.abstraction.bukkit.BukkitMCItemStack;
 import io.netty.buffer.Unpooled;
 import kr.rvs.chplus.CHPlus;
 import kr.rvs.chplus.util.wrapper.AnvilContainerWrapper;
@@ -134,12 +136,12 @@ public class CHPlusFactory {
         }
     }
 
-    public static ItemStack createDefaultAnvilInputItem() {
+    public static MCItemStack createDefaultAnvilInputItem() {
         ItemStack item = new ItemStack(Material.NAME_TAG);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("Enter input...");
         item.setItemMeta(meta);
 
-        return item;
+        return new BukkitMCItemStack(item);
     }
 }

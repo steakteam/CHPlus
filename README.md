@@ -4,60 +4,40 @@
 
 ## 함수
 
-### set_tab_msg(player, header, footer)
+| 함수명                    | 반환 타입 | 인자                                  | 설명                                                        |
+| ---                     | ---       | ---                              | ---                                                         |
+| set_tab_msg             | void      | [player], header, footer         | 해당 플레이어의 탭창에 헤더와 푸터를 설정합니다.            |
+| send_action_msg         | void      | [player], text                   | 해당 플레이어에게 액션 메세지를 보냅니다.                         |
+| send_json_msg           | void      | [player], json                   | 해당 플레이어에게 json 메세지(tellraw) 를 보냅니다.                 |
+| launch_instant_firework | void      | [locationArray](http://wiki.sk89q.com/wiki/CommandHelper/Array_Formatting#Location_array), [[fireworkArray]](http://wiki.sk89q.com/wiki/CommandHelper/Staged/API/launch_firework#Description) | 해당 위치에 즉시 터지는 폭죽을 발사합니다.
+| user_input              | void      | [player], closure, [itemArray]   | 모루 GUI 로 플레이어의 입력값을 closure 로 받습니다. |
+| pping                   | int       | [player]                         |  해당 플레이어의 핑(지연시간) 을 불러옵니다.                                       |
+| chp_respawn             | void      | [player]                         | 해당 플레이어를 리스폰시킵니다.                                                      |
+| inv_title               | string    | [player]                         | 해당 플레이어에 열려있는 탑 인벤토리의 타이틀을 불러옵니다.                          |
 
-반환값: void
+## 함수 예제
 
-설명: 해당 플레이어의 탭창의 헤더와 푸터를 설정합니다.
-
-예제: 
+### set_tab_msg
 ```coffeescript
 set_tab_msg('EntryPoint', 'Header', 'Footer')
 ```
 
-### send_action_msg(player, text)
-
-반환값: void
-
-설명: 해당 플레이어에게 액션 메세지를 보냅니다.
-
-예제: send_action_msg('EntryPoint', 'This is action message')
-
-### send_title_msg(player, title, subtitle, fadein, stay, fadeout)
-
-반환값: void
-
-설명: 해당 플레이어에게 타이틀 메세지를 보냅니다.
-
-예제: 
+### send_action_msg
 ```coffeescript
-send_title_msg('EntryPoint', 'Title', 'Subtitle', 20, 20, 20)
-````
+send_action_msg('EntryPoint', 'This is action message')
+```
 
-### send_json_msg(player, json)
+### send_json_msg
+```coffeescript
 
-반환값: void
+```
 
-설명: 해당 플레이어에게 json 메세지(tellraw) 를 보냅니다.
-
-### launch_instant_firework([locationArray](http://wiki.sk89q.com/wiki/CommandHelper/Array_Formatting#Location_array), [[fireworkArray]](http://wiki.sk89q.com/wiki/CommandHelper/Staged/API/launch_firework#Description))
-
-반환값: void
-
-설명: 해당 위치에 즉시 터지는 폭죽을 발사합니다.
-
-예제: 
+### launch_instant_firework
 ```coffeescript
 launch_instant_firework(array('x': 1, 'y': 2, 'z': 3, 'world': 'world'))
 ```
 
-### user_input(player, closure, [itemArray])
-
-반환값: void
-
-설명: 모루 GUI 로 플레이어의 입력값을 closure 로 받습니다.
-
-예제: 
+### user_input
 ```coffeescript
 @callback = closure(@msg) {
   'EntryPoint 님이' @msg '를 입력했습니다.'
@@ -71,13 +51,7 @@ launch_instant_firework(array('x': 1, 'y': 2, 'z': 3, 'world': 'world'))
 user_input('EntryPoint', @callback, @item);
 ```
 
-### pping(player)
-
-반환값: int
-
-설명: 해당 플레이어의 핑 값을 불러옵니다.
-
-예제:
+### pping
 ```coffeescript
 @ping = pping('EntryPoint')
 if (@ping > 1000) {
@@ -85,13 +59,7 @@ if (@ping > 1000) {
 }
 ```
 
-### chp_respawn(player])
-
-반환값: void
-
-설명: 해당 플레이어를 리스폰시킵니다.
-
-예제:
+### chp_respawn
 ```coffeescript
 chp_respawn('EntryPoint')
 ```

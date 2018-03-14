@@ -20,6 +20,10 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Queue;
+
 /**
  * Created by JunHyeong Lim on 2018-03-13
  */
@@ -27,21 +31,18 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class AnvilUserInput extends CHPlusFunction {
     @Override
     public Construct exec(final Target t, Environment env, Construct... args) throws ConfigRuntimeException {
-        MCPlayer player = Static.GetPlayer(args[0], t);
-        CClosure closure = Static.getObject(args[1], t, CClosure.class);
+        Queue<Construct> queue = new ArrayDeque<>(Arrays.asList(args));
+        MCPlayer player = queue.size() >= 2
+                ? Static.GetPlayer(queue.poll(), t)
+                : Static.getPlayer(env, t);
+        CClosure closure = Static.getObject(queue.poll(), t, CClosure.class);
         GUIHelper helper = new GUIHelper(InventoryType.ANVIL)
                 .putListener(new AnvilInputHandler(closure, t));
-
-        if (args.length >= 3) {
-            helper.putItem(0,
-                    ObjectGenerator.GetGenerator().item(args[2], t));
-        } else {
-            helper.putItem(0,
-                    CHPlusFactory.createDefaultAnvilInputItem());
-        }
+        helper.putItem(0, queue.isEmpty()
+                ? CHPlusFactory.createDefaultAnvilInputItem()
+                : ObjectGenerator.GetGenerator().item(queue.poll(), t));
 
         helper.open(player);
-
         return CVoid.VOID;
     }
 
@@ -52,12 +53,12 @@ public class AnvilUserInput extends CHPlusFunction {
 
     @Override
     public Integer[] numArgs() {
-        return new Integer[]{2, 3};
+        return new Integer[]{1, 2, 3};
     }
 
     @Override
     public String docs() {
-        return "void {player, callback closure, [item array]} " +
+        return "void {[player], callback closure, [item array]} " +
                 "Open an Anvil GUI input for player, calling the callback closure when the player submits the input. " +
                 "The text the player typed in gets returned to the closure. " +
                 "Item can be an item array, already only the keys 'type', 'data' and 'display' are used. ";
