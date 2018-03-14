@@ -1,10 +1,12 @@
 package kr.rvs.chplus.util.wrapper;
 
-import kr.rvs.chplus.util.Static;
+import kr.rvs.chplus.util.Tools;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
 
 /**
  * Created by Junhyeong Lim on 2017-07-05.
@@ -23,7 +25,7 @@ public class AnvilContainerWrapper {
             Method topInventory = bukkitView.getClass().getMethod("getTopInventory");
 
             return (Inventory) topInventory.invoke(bukkitView);
-        } catch (Throwable th) {
+        } catch (Exception e) {
             throw new IllegalStateException("Can't get inventory");
         }
     }
@@ -33,17 +35,17 @@ public class AnvilContainerWrapper {
             Field windowIdField = handle.getClass().getSuperclass().getField("windowId");
             windowIdField.set(handle, counter);
         } catch (Exception e) {
-            e.printStackTrace();
+            Bukkit.getLogger().log(Level.WARNING, e, () -> "Failed setWindowId");
         }
     }
 
     public void addSlotListener(PlayerWrapper playerWrapper) {
         try {
             Method addSlotListenerMethod = handle.getClass().getMethod("addSlotListener",
-                    Static.getNMSClass("ICrafting"));
+                    Tools.getNMSClass("ICrafting"));
             addSlotListenerMethod.invoke(handle, playerWrapper.getEntityPlayer());
         } catch (Exception e) {
-            e.printStackTrace();
+            Bukkit.getLogger().log(Level.WARNING, e, () -> "Failed addSlotListener");
         }
     }
 

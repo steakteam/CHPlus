@@ -102,21 +102,21 @@ public class CHPlusFactory {
 
     public static AnvilContainerWrapper createAnvilContainer(MethodInterceptor interceptor, PlayerWrapper playerWrapper) {
         Enhancer proxy = new Enhancer();
-        proxy.setSuperclass(Static.getNMSClass("ContainerAnvil"));
+        proxy.setSuperclass(Tools.getNMSClass("ContainerAnvil"));
         proxy.setCallback(interceptor);
         proxy.setClassLoader(CHPlus.class.getClassLoader());
 
         Class[] argumentTypes = new Class[4];
         Object[] arguments = new Object[4];
 
-        argumentTypes[0] = Static.getNMSClass("PlayerInventory");
-        argumentTypes[1] = Static.getNMSClass("World");
-        argumentTypes[2] = Static.getNMSClass("BlockPosition");
-        argumentTypes[3] = Static.getNMSClass("EntityHuman");
+        argumentTypes[0] = Tools.getNMSClass("PlayerInventory");
+        argumentTypes[1] = Tools.getNMSClass("World");
+        argumentTypes[2] = Tools.getNMSClass("BlockPosition");
+        argumentTypes[3] = Tools.getNMSClass("EntityHuman");
 
         arguments[0] = playerWrapper.getPlayerInventory();
         arguments[1] = playerWrapper.getWorld();
-        arguments[2] = Static.getEmptyBlockPosition();
+        arguments[2] = Tools.getEmptyBlockPosition();
         arguments[3] = playerWrapper.getEntityPlayer();
 
         return new AnvilContainerWrapper(proxy.create(argumentTypes, arguments));
@@ -124,14 +124,13 @@ public class CHPlusFactory {
 
     public static WrappedChatComponent createChatMessage(String msg) {
         try {
-            Class clazz = Static.getNMSClass("ChatMessage");
+            Class clazz = Tools.getNMSClass("ChatMessage");
             Constructor conzt = clazz.getConstructor(String.class, Object[].class);
             Object chatMessage = conzt.newInstance(msg, new Object[0]);
 
             return WrappedChatComponent.fromHandle(chatMessage);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new IllegalStateException("Can't find a ChatMessage class");
+            throw new IllegalStateException("Can't find a ChatMessage class", e);
         }
     }
 

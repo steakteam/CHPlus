@@ -7,7 +7,7 @@ import java.lang.reflect.Constructor;
 /**
  * Created by Junhyeong Lim on 2017-07-05.
  */
-public class Static {
+public class Tools {
     private static String nmsPackageName;
     private static Object emptyBlockPosition;
 
@@ -15,7 +15,7 @@ public class Static {
         if (nmsPackageName == null) {
             String packageName = EnumWrappers.getProtocolClass().getName();
             nmsPackageName = packageName.substring(0,
-                    packageName.lastIndexOf("."));
+                    packageName.lastIndexOf('.'));
         }
 
         return nmsPackageName + "." + name;
@@ -31,7 +31,7 @@ public class Static {
 
     public static Object getEmptyBlockPosition() {
         if (emptyBlockPosition == null) {
-            Class blockPositionClass = Static.getNMSClass("BlockPosition");
+            Class blockPositionClass = Tools.getNMSClass("BlockPosition");
             try {
                 Constructor constructor = blockPositionClass.getConstructor(int.class, int.class, int.class);
                 emptyBlockPosition = constructor.newInstance(0, 0, 0);

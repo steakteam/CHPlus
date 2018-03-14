@@ -2,7 +2,6 @@ package kr.rvs.chplus.util.wrapper;
 
 import com.comphenix.protocol.utility.MinecraftReflection;
 import io.netty.buffer.ByteBuf;
-import kr.rvs.chplus.util.Static;
 
 import java.lang.reflect.Constructor;
 
