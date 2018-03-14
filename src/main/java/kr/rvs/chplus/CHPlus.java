@@ -23,8 +23,6 @@ public class CHPlus extends AbstractExtension {
     public static final byte CHAT_TYPE_SYSTEM = 1;
     public static final byte CHAT_TYPE_GAME_INFO = 2;
 
-    private static ServerPingProtocolListener sppl;
-
     @Override
     public Version getVersion() {
         return new SimpleVersion(1, 4, 0);
@@ -35,14 +33,14 @@ public class CHPlus extends AbstractExtension {
         Validate.isTrue(Bukkit.getPluginManager().isPluginEnabled("ProtocolLib"), "[CHPlus] ProtocolLib not found.");
 
         GUIHelper.init();
-        sppl = new ServerPingProtocolListener();
+        ServerPingProtocolListener.init();
         Bukkit.getLogger().log(Level.INFO, "CHPlus " + getVersion() + " enabled.");
     }
 
     @Override
     public void onShutdown() {
         GUIHelper.unregister();
-        sppl.unregister();
+        ServerPingProtocolListener.unregister();
         Bukkit.getLogger().log(Level.INFO, "CHPlus " + getVersion() + " disabled.");
     }
 }

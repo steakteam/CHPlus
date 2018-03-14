@@ -38,6 +38,7 @@ public class InventoryTitle extends CHPlusFunction {
     @Override
     public String docs() {
         return "string {[player]} " +
-                "Returns the top inventory title";
+                "Returns a top inventory title " +
+                "If not opened a top inventory on that player, returns  \"null\" string.";
     }
 }
