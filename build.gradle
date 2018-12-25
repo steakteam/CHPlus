@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-group 'kr.rvs.chplus'
+group 'io.github.steakteam'
 
 apply plugin: 'java'
 apply plugin: "com.github.johnrengelman.shadow"
@@ -48,8 +48,8 @@ shadowJar {
         include dependency('cglib:cglib:3.2.5')
         include dependency('org.ow2.asm:asm:5.2')
     }
-    relocate 'net.sf', 'kr.rvs.chplus.libs.net.sf'
-    relocate 'org.objectweb', 'kr.rvs.chplus.libs.org.objectweb'
+    relocate 'net.sf', "${project.group}.chplus.libs.net.sf"
+    relocate 'org.objectweb', "${project.group}.chplus.libs.org.objectweb"
 }
 
 artifacts {
