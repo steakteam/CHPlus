@@ -68,3 +68,6 @@ chp_respawn('EntryPoint')
 
 ### server_ping_protocol
 일반적인 `server_ping` 이벤트와 동일하지만 이벤트 데이터가 `players`(현재 온라인 플레이어의 수) 밖에 없으며, 이 필드는 수정 가능합니다.(원래 플레이어 수 이상도 가능)
+
+### inventory_move_item
+아이템이 다른 인벤토리로 이동될 때 호출됩니다.
