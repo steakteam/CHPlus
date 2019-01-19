@@ -8,6 +8,7 @@ import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.events.BindableEvent;
 import com.laytonsmith.core.exceptions.EventException;
 import com.laytonsmith.core.exceptions.PrefilterNonMatchException;
+import com.laytonsmith.core.natives.interfaces.Mixed;
 import io.github.steakteam.chplus.event.internal.MCInventoryMoveItemEvent;
 import io.github.steakteam.chplus.util.Tools;
 
@@ -30,16 +31,16 @@ public class InventoryMoveItem extends CHPlusAbstractEvent {
     }
 
     @Override
-    public boolean matches(Map<String, Construct> map, BindableEvent bindableEvent) throws PrefilterNonMatchException {
+    public boolean matches(Map<String, Mixed> map, BindableEvent bindableEvent) {
         return bindableEvent instanceof MCInventoryMoveItemEvent;
     }
 
     @Override
-    public Map<String, Construct> evaluate(BindableEvent bindableEvent) throws EventException {
+    public Map<String, Mixed> evaluate(BindableEvent bindableEvent) throws EventException {
         if (bindableEvent instanceof MCInventoryMoveItemEvent) {
             Target t = Target.UNKNOWN;
             MCInventoryMoveItemEvent e = ((MCInventoryMoveItemEvent) bindableEvent);
-            Map<String, Construct> ret = new HashMap<>();
+            Map<String, Mixed> ret = new HashMap<>();
             ret.put("source", Tools.toArray(t, e.getSource()));
             ret.put("destination", Tools.toArray(t, e.getDestination()));
             ret.put("initiator", new CString(e.getInitiator() == e.getSource() ? "source" : "destination", t));
@@ -50,7 +51,7 @@ public class InventoryMoveItem extends CHPlusAbstractEvent {
     }
 
     @Override
-    public boolean modifyEvent(String s, Construct construct, BindableEvent bindableEvent) {
+    public boolean modifyEvent(String s, Mixed construct, BindableEvent bindableEvent) {
         return false;
     }
 }

@@ -8,6 +8,7 @@ import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.Environment;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
+import com.laytonsmith.core.natives.interfaces.Mixed;
 import io.github.steakteam.chplus.util.wrapper.PlayerWrapper;
 
 /**
@@ -16,7 +17,7 @@ import io.github.steakteam.chplus.util.wrapper.PlayerWrapper;
 @api
 public class PlayerPing extends CHPlusFunction {
     @Override
-    public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+    public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
         MCPlayer player = args.length > 0
                 ? Static.GetPlayer(args[0], t)
                 : Static.getPlayer(env, t);

@@ -1,13 +1,13 @@
 package io.github.steakteam.chplus.function;
 
 import com.laytonsmith.PureUtilities.Version;
-import com.laytonsmith.core.CHVersion;
-import com.laytonsmith.core.constructs.Construct;
+import com.laytonsmith.core.MSVersion;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.Environment;
 import com.laytonsmith.core.exceptions.CRE.*;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
 import com.laytonsmith.core.functions.AbstractFunction;
+import com.laytonsmith.core.natives.interfaces.Mixed;
 
 /**
  * Created by JunHyeong Lim on 2018-03-13
@@ -19,7 +19,7 @@ public abstract class CHPlusFunction extends AbstractFunction {
     }
 
     @Override
-    public abstract Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException;
+    public abstract Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException;
 
     @Override
     public Class<? extends CREThrowable>[] thrown() {
@@ -38,6 +38,6 @@ public abstract class CHPlusFunction extends AbstractFunction {
 
     @Override
     public Version since() {
-        return CHVersion.V3_3_2;
+        return MSVersion.V3_3_2;
     }
 }

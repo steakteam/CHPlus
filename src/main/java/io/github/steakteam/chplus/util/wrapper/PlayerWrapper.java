@@ -6,6 +6,7 @@ import com.laytonsmith.abstraction.MCPlayer;
 import com.laytonsmith.core.Static;
 import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
+import com.laytonsmith.core.natives.interfaces.Mixed;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
@@ -37,7 +38,7 @@ public class PlayerWrapper {
         return of((Player) handle);
     }
 
-    public static PlayerWrapper of(Construct name, Target t) {
+    public static PlayerWrapper of(Mixed name, Target t) {
         return of(Static.GetPlayer(name, t));
     }
 

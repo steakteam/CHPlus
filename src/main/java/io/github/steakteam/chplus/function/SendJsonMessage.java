@@ -9,6 +9,7 @@ import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.Environment;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
+import com.laytonsmith.core.natives.interfaces.Mixed;
 import io.github.steakteam.chplus.CHPlus;
 import io.github.steakteam.chplus.util.CHPlusFactory;
 import io.github.steakteam.chplus.util.wrapper.PlayerWrapper;
@@ -23,8 +24,8 @@ import java.util.Queue;
 @api
 public class SendJsonMessage extends CHPlusFunction {
     @Override
-    public Construct exec(Target t, Environment environment, Construct... args) throws ConfigRuntimeException {
-        Queue<Construct> queue = new ArrayDeque<>(Arrays.asList(args));
+    public Mixed exec(Target t, Environment environment, Mixed... args) throws ConfigRuntimeException {
+        Queue<Mixed> queue = new ArrayDeque<>(Arrays.asList(args));
         MCPlayer player = queue.size() >= 2
                 ? Static.GetPlayer(queue.poll(), t)
                 : Static.getPlayer(environment, t);

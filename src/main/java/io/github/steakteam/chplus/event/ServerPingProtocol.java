@@ -7,6 +7,7 @@ import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.events.BindableEvent;
 import com.laytonsmith.core.exceptions.EventException;
 import com.laytonsmith.core.exceptions.PrefilterNonMatchException;
+import com.laytonsmith.core.natives.interfaces.Mixed;
 import io.github.steakteam.chplus.event.internal.MCServerPingProtocolEvent;
 
 import java.util.HashMap;
@@ -32,16 +33,16 @@ public class ServerPingProtocol extends CHPlusAbstractEvent {
     }
 
     @Override
-    public boolean matches(Map<String, Construct> map, BindableEvent bindableEvent) throws PrefilterNonMatchException {
+    public boolean matches(Map<String, Mixed> map, BindableEvent bindableEvent) {
         return bindableEvent instanceof MCServerPingProtocolEvent;
     }
 
     @Override
-    public Map<String, Construct> evaluate(BindableEvent bindableEvent) throws EventException {
+    public Map<String, Mixed> evaluate(BindableEvent bindableEvent) throws EventException {
         if (bindableEvent instanceof MCServerPingProtocolEvent) {
             MCServerPingProtocolEvent e = (MCServerPingProtocolEvent) bindableEvent;
             Target t = Target.UNKNOWN;
-            Map<String, Construct> ret = new HashMap<>();
+            Map<String, Mixed> ret = new HashMap<>();
             ret.put("players", e.getPlayerCount(t));
             return ret;
         } else {
@@ -50,7 +51,7 @@ public class ServerPingProtocol extends CHPlusAbstractEvent {
     }
 
     @Override
-    public boolean modifyEvent(String s, Construct construct, BindableEvent bindableEvent) {
+    public boolean modifyEvent(String s, Mixed construct, BindableEvent bindableEvent) {
         if (bindableEvent instanceof MCServerPingProtocolEvent) {
             MCServerPingProtocolEvent e = (MCServerPingProtocolEvent) bindableEvent;
             if (s.equalsIgnoreCase("players")) {

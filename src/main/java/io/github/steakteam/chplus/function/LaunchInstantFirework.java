@@ -16,6 +16,7 @@ import com.laytonsmith.core.exceptions.CRE.CREFormatException;
 import com.laytonsmith.core.exceptions.CRE.CREInvalidWorldException;
 import com.laytonsmith.core.exceptions.CRE.CREThrowable;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
+import com.laytonsmith.core.natives.interfaces.Mixed;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Firework;
 
@@ -27,7 +28,7 @@ import java.util.Collections;
 @api
 public class LaunchInstantFirework extends CHPlusFunction {
     @Override
-    public Construct exec(Target t, Environment environment, Construct... args) throws ConfigRuntimeException {
+    public Mixed exec(Target t, Environment environment, Mixed... args) throws ConfigRuntimeException {
         MCLocation location = ObjectGenerator.GetGenerator().location(args[0], null, t);
         CArray array = args.length >= 2
                 ? Static.getArray(args[1], t)

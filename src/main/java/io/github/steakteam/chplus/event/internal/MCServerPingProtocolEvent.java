@@ -5,7 +5,7 @@ import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.events.BindableEvent;
 
 public interface MCServerPingProtocolEvent extends BindableEvent {
-    public CInt getPlayerCount(Target t);
+    CInt getPlayerCount(Target t);
 
-    public void setPlayerCount(int playerCount);
+    void setPlayerCount(int playerCount);
 }

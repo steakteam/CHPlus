@@ -7,6 +7,7 @@ import com.laytonsmith.core.Static;
 import com.laytonsmith.core.constructs.*;
 import com.laytonsmith.core.environments.Environment;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
+import com.laytonsmith.core.natives.interfaces.Mixed;
 import io.github.steakteam.chplus.util.CHPlusFactory;
 import io.github.steakteam.chplus.util.GUIHelper;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -25,9 +26,10 @@ import java.util.Queue;
  */
 @api
 public class AnvilUserInput extends CHPlusFunction {
+
     @Override
-    public Construct exec(final Target t, Environment env, Construct... args) throws ConfigRuntimeException {
-        Queue<Construct> queue = new ArrayDeque<>(Arrays.asList(args));
+    public Mixed exec(final Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
+        Queue<Mixed> queue = new ArrayDeque<>(Arrays.asList(args));
         MCPlayer player = queue.size() >= 2
                 ? Static.GetPlayer(queue.poll(), t)
                 : Static.getPlayer(env, t);

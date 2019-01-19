@@ -25,13 +25,16 @@ repositories {
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     maven { url 'http://mvn2.sk89q.com/repo' }
     maven { url 'http://repo.dmulloy2.net/nexus/repository/public/' }
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 dependencies {
     compile('org.spigotmc:spigot-api:1.12-R0.1-SNAPSHOT') {
         exclude module: 'bungeecord-chat'
     }
-    compile('com.sk89q:commandhelper:3.3.2-SNAPSHOT') {
+    compile('com.sk89q:commandhelper:3.3.4-SNAPSHOT') {
         exclude module: 'spigot-api'
     }
     compile(group: 'com.comphenix.protocol', name: 'ProtocolLib-API', version: '4.4.0-SNAPSHOT') {

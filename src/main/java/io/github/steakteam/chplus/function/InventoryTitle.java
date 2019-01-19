@@ -9,6 +9,7 @@ import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.Environment;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
+import com.laytonsmith.core.natives.interfaces.Mixed;
 
 /**
  * Created by JunHyeong Lim on 2018-03-14
@@ -16,7 +17,7 @@ import com.laytonsmith.core.exceptions.ConfigRuntimeException;
 @api
 public class InventoryTitle extends CHPlusFunction {
     @Override
-    public Construct exec(Target t, Environment env, Construct... args) throws ConfigRuntimeException {
+    public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
         MCPlayer player = args.length > 0
                 ? Static.GetPlayer(args[0], t)
                 : Static.getPlayer(env, t);
