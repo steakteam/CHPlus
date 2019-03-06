@@ -5,11 +5,11 @@ import com.laytonsmith.abstraction.MCPlayer;
 import com.laytonsmith.annotations.api;
 import com.laytonsmith.core.Static;
 import com.laytonsmith.core.constructs.CString;
-import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.Environment;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
 import com.laytonsmith.core.natives.interfaces.Mixed;
+import io.github.steakteam.chplus.util.Reader;
 
 /**
  * Created by JunHyeong Lim on 2018-03-14
@@ -17,9 +17,9 @@ import com.laytonsmith.core.natives.interfaces.Mixed;
 @api
 public class InventoryTitle extends CHPlusFunction {
     @Override
-    public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
-        MCPlayer player = args.length > 0
-                ? Static.GetPlayer(args[0], t)
+    public Mixed exec(Target t, Environment env, Reader<Mixed> args) throws ConfigRuntimeException {
+        MCPlayer player = args.size() > 0
+                ? Static.GetPlayer(args.read(), t)
                 : Static.getPlayer(env, t);
         MCInventory topInv = player.getOpenInventory().getTopInventory();
         String title = topInv != null ? topInv.getTitle() : "null";

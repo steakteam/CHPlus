@@ -4,7 +4,6 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.laytonsmith.abstraction.MCPlayer;
 import com.laytonsmith.core.Static;
-import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.natives.interfaces.Mixed;
 import org.apache.commons.lang.Validate;

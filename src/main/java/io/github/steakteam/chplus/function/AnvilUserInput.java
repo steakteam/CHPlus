@@ -4,12 +4,16 @@ import com.laytonsmith.abstraction.MCPlayer;
 import com.laytonsmith.annotations.api;
 import com.laytonsmith.core.ObjectGenerator;
 import com.laytonsmith.core.Static;
-import com.laytonsmith.core.constructs.*;
+import com.laytonsmith.core.constructs.CClosure;
+import com.laytonsmith.core.constructs.CString;
+import com.laytonsmith.core.constructs.CVoid;
+import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.Environment;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
 import com.laytonsmith.core.natives.interfaces.Mixed;
 import io.github.steakteam.chplus.util.CHPlusFactory;
 import io.github.steakteam.chplus.util.GUIHelper;
+import io.github.steakteam.chplus.util.Reader;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryEvent;
@@ -17,28 +21,22 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Queue;
-
 /**
  * Created by JunHyeong Lim on 2018-03-13
  */
 @api
 public class AnvilUserInput extends CHPlusFunction {
-
     @Override
-    public Mixed exec(final Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
-        Queue<Mixed> queue = new ArrayDeque<>(Arrays.asList(args));
-        MCPlayer player = queue.size() >= 2
-                ? Static.GetPlayer(queue.poll(), t)
+    public Mixed exec(Target t, Environment env, Reader<Mixed> args) throws ConfigRuntimeException {
+        MCPlayer player = args.size() >= 2
+                ? Static.GetPlayer(args.read(), t)
                 : Static.getPlayer(env, t);
-        CClosure closure = Static.getObject(queue.poll(), t, CClosure.class);
+        CClosure closure = Static.getObject(args.read(), t, CClosure.class);
         GUIHelper helper = new GUIHelper(InventoryType.ANVIL)
                 .putListener(new AnvilInputHandler(closure, t));
-        helper.putItem(0, queue.isEmpty()
+        helper.putItem(0, args.isEmpty()
                 ? CHPlusFactory.createDefaultAnvilInputItem()
-                : ObjectGenerator.GetGenerator().item(queue.poll(), t));
+                : ObjectGenerator.GetGenerator().item(args.read(), t));
 
         helper.open(player);
         return CVoid.VOID;

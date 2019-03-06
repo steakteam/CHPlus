@@ -4,11 +4,11 @@ import com.laytonsmith.abstraction.MCPlayer;
 import com.laytonsmith.annotations.api;
 import com.laytonsmith.core.Static;
 import com.laytonsmith.core.constructs.CInt;
-import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.Environment;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
 import com.laytonsmith.core.natives.interfaces.Mixed;
+import io.github.steakteam.chplus.util.Reader;
 import io.github.steakteam.chplus.util.wrapper.PlayerWrapper;
 
 /**
@@ -17,9 +17,9 @@ import io.github.steakteam.chplus.util.wrapper.PlayerWrapper;
 @api
 public class PlayerPing extends CHPlusFunction {
     @Override
-    public Mixed exec(Target t, Environment env, Mixed... args) throws ConfigRuntimeException {
-        MCPlayer player = args.length > 0
-                ? Static.GetPlayer(args[0], t)
+    public Mixed exec(Target t, Environment env, Reader<Mixed> args) throws ConfigRuntimeException {
+        MCPlayer player = args.isRemain()
+                ? Static.GetPlayer(args.read(), t)
                 : Static.getPlayer(env, t);
         return new CInt(PlayerWrapper.of(player).getPing(), t);
     }

@@ -8,7 +8,6 @@ import com.laytonsmith.core.ObjectGenerator;
 import com.laytonsmith.core.Static;
 import com.laytonsmith.core.constructs.CArray;
 import com.laytonsmith.core.constructs.CVoid;
-import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.Environment;
 import com.laytonsmith.core.exceptions.CRE.CRECastException;
@@ -17,6 +16,7 @@ import com.laytonsmith.core.exceptions.CRE.CREInvalidWorldException;
 import com.laytonsmith.core.exceptions.CRE.CREThrowable;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
 import com.laytonsmith.core.natives.interfaces.Mixed;
+import io.github.steakteam.chplus.util.Reader;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Firework;
 
@@ -28,10 +28,10 @@ import java.util.Collections;
 @api
 public class LaunchInstantFirework extends CHPlusFunction {
     @Override
-    public Mixed exec(Target t, Environment environment, Mixed... args) throws ConfigRuntimeException {
-        MCLocation location = ObjectGenerator.GetGenerator().location(args[0], null, t);
-        CArray array = args.length >= 2
-                ? Static.getArray(args[1], t)
+    public Mixed exec(Target t, Environment env, Reader<Mixed> args) throws ConfigRuntimeException {
+        MCLocation location = ObjectGenerator.GetGenerator().location(args.read(), null, t);
+        CArray array = args.isRemain()
+                ? Static.getArray(args.read(), t)
                 : CArray.GetAssociativeArray(t);
         MCFireworkEffect effect = ObjectGenerator.GetGenerator()
                 .fireworkEffect(array, t);

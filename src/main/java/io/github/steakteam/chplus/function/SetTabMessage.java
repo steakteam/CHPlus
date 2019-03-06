@@ -4,17 +4,13 @@ import com.laytonsmith.abstraction.MCPlayer;
 import com.laytonsmith.annotations.api;
 import com.laytonsmith.core.Static;
 import com.laytonsmith.core.constructs.CVoid;
-import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.Environment;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
 import com.laytonsmith.core.natives.interfaces.Mixed;
 import io.github.steakteam.chplus.util.CHPlusFactory;
+import io.github.steakteam.chplus.util.Reader;
 import io.github.steakteam.chplus.util.wrapper.PlayerWrapper;
-
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Queue;
 
 /**
  * Created by JunHyeong Lim on 2018-03-13
@@ -22,13 +18,12 @@ import java.util.Queue;
 @api
 public class SetTabMessage extends CHPlusFunction {
     @Override
-    public Mixed exec(Target t, Environment environment, Mixed... args) throws ConfigRuntimeException {
-        Queue<Mixed> queue = new ArrayDeque<>(Arrays.asList(args));
-        MCPlayer player = queue.size() >= 3
-                ? Static.GetPlayer(queue.poll(), t)
+    public Mixed exec(Target t, Environment environment, Reader<Mixed> args) throws ConfigRuntimeException {
+        MCPlayer player = args.size() >= 3
+                ? Static.GetPlayer(args.read(), t)
                 : Static.getPlayer(environment, t);
-        String title = queue.poll().val();
-        String footer = queue.poll().val();
+        String title = args.read().val();
+        String footer = args.read().val();
 
         PlayerWrapper.of(player).sendPacket(
                 CHPlusFactory.createPlayerListHeaderFooterPacket(title, footer)
