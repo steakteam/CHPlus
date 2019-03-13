@@ -21,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 
 /**
  * Created by Junhyeong Lim on 2017-06-18.
@@ -38,25 +37,15 @@ public class CHPlusFactory {
         return packet;
     }
 
-    @SuppressWarnings("unchecked")
-    public static PacketContainer createChatPacket(WrappedChatComponent component, byte type) {
+    public static PacketContainer createChatPacket(WrappedChatComponent component, EnumWrappers.ChatType type) {
         PacketContainer packet = ProtocolLibrary.getProtocolManager()
                 .createPacket(PacketType.Play.Server.CHAT);
 
         // Chat type
         if (CHPlus.BUKKIT_VERSION.gte(CHPlus.V1_12)) {
-            Class chatTypeClass = EnumWrappers.getChatTypeClass();
-            StructureModifier components = packet.getSpecificModifier(chatTypeClass);
-
-            // TODO: ProtocolLib 4.3.1 안정화 시 제거
-            try {
-                Method findByByte = chatTypeClass.getMethod("a", byte.class);
-                components.write(0, findByByte.invoke(null, type));
-            } catch (Exception e) {
-                // Ignore
-            }
+            packet.getChatTypes().write(0, type);
         } else {
-            packet.getBytes().write(0, type);
+            packet.getBytes().write(0, type.getId());
         }
 
         // Contents
@@ -94,7 +83,7 @@ public class CHPlusFactory {
                 .createPacket(PacketType.Play.Server.CUSTOM_PAYLOAD);
         PacketDataSerializerWrapper serializerWrapper = PacketDataSerializerWrapper.of(Unpooled.buffer())
                 .writeEnum(hand);
-        StructureModifier serializerModifier = packet.getSpecificModifier(MinecraftReflection.getPacketDataSerializerClass());
+        StructureModifier<Object> serializerModifier = packet.getSpecificModifier((Class<Object>) MinecraftReflection.getPacketDataSerializerClass());
 
         packet.getStrings().write(0, channel);
         serializerModifier.write(0, serializerWrapper.getHandle());
@@ -126,8 +115,8 @@ public class CHPlusFactory {
 
     public static WrappedChatComponent createChatMessage(String msg) {
         try {
-            Class clazz = Tools.getNMSClass("ChatMessage");
-            Constructor conzt = clazz.getConstructor(String.class, Object[].class);
+            Class<?> clazz = Tools.getNMSClass("ChatMessage");
+            Constructor<?> conzt = clazz.getConstructor(String.class, Object[].class);
             Object chatMessage = conzt.newInstance(msg, new Object[0]);
 
             return WrappedChatComponent.fromHandle(chatMessage);

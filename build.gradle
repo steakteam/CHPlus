@@ -28,7 +28,7 @@ dependencies {
     compile group: 'cglib', name: 'cglib', version: '3.2.5'
     compile group: 'org.ow2.asm', name: 'asm', version: '5.2'
     compile group: 'io.netty', name: 'netty-buffer', version: '4.1.22.Final'
-    compile fileTree('dir': 'libs', 'include': '*.jar')
+    compileOnly fileTree('dir': 'libs', 'include': '*.jar')
 }
 
 shadowJar {

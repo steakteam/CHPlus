@@ -36,7 +36,7 @@ public class Tools {
 
     public static Object getEmptyBlockPosition() {
         if (emptyBlockPosition == null) {
-            Class blockPositionClass = Tools.getNMSClass("BlockPosition");
+            Class<?> blockPositionClass = Tools.getNMSClass("BlockPosition");
             try {
                 Constructor constructor = blockPositionClass.getConstructor(int.class, int.class, int.class);
                 emptyBlockPosition = constructor.newInstance(0, 0, 0);

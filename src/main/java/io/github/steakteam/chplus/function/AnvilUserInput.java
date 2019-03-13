@@ -88,7 +88,7 @@ public class AnvilUserInput extends CHPlusFunction {
 
                     e.getView().getTopInventory().clear();
                     clickEvent.getWhoClicked().closeInventory();
-                    closure.execute(new CString(name, target));
+                    closure.executeClosure(new CString(name, target));
                 }
             } else if (e instanceof InventoryCloseEvent) {
                 e.getInventory().clear();
